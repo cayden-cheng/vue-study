@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--导入vue的包-->
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+<body>
+<!--将来new的vue实例会控制这个元素中的所有内容-->
+<!--元素控制区域v-->
+<div id = "app">
+    <p>{{msg}}</p>
+</div>
+
+
+<script>
+    //创建一个vue实例
+    //当我们导入包之后,在浏览器的内存中就多了一个vue构造函数
+   // vm
+    var vm = new Vue({
+        el: '#app',//表示当前我们new的这个vue实例,要控制页面上的哪个区域
+        data: {//data属性中,存放的是el中要用到的数据
+          msg: '亮哥哥在学习vue' //通过vue提供的指令，可以很方便的把数据渲染到页面上，程序员不在手动操作DOM元素
+          //[]前端vue之类的框架不再提倡我们去手动操作DOM元素了
+        } 
+    })
+</script>
+
+</body>
+</html>
