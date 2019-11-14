@@ -26,7 +26,7 @@
         <!--v-bind中可以些合法的js表达式-->
         <!-- <input type="button" value="按钮" v-bind:title="myTitle + '123'" v-on:click="alert('sss')"> -->
 
-        <input type="button" value="按钮" v-on:click="show" v-on:mouseover="show">
+        <input type="button" value="按钮" @click="show"> <!--v-on:mouseover="show"-->
     </div>
 
  <!--导入vue的包-->
@@ -54,3 +54,9 @@ document.getElementById('btn').onclick = function(){
 
 </body>
 </html>
+
+
+
+<!--如何定义一个基本的vue代码结构-->
+<!--插值表达式和 v-text-->
+<!--v-cloak,v-html v-bind 缩写为 : v-on 简写为@-->
