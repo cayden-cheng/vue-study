@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 注意:在便利对象身上的键值对的时候，除了key,value 还有键值对索引 -->
+        <p v-for = "(key,value,i) in user">值为:{{key}},键为:{{value}},索引:{{i}}</p>
+    </div>
+    <script>
+         var vm = new Vue({
+            el : '#app',
+            data : { 
+                user:{
+                    id : 1,
+                    name : "cheng",
+                    sex : "man"
+                }
+             },
+            methods : { }    
+        });
+    </script>
+</body>
+
+</html>
