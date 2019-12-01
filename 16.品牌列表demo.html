@@ -9,11 +9,11 @@
     <script src="./lib/vue-2.4.0.js"></script>
     <link rel="stylesheet" href="./lib/bootstrap-3.3.7.css">
 
-    <!-- 思考需要使用jequery么？ vue 免除操作dom，所以不用jquery-->
+    <!-- 思考需要使用jquery么？ vue 免除操作dom，所以不用jquery-->
 </head>
 
 <body>
-    <div id="app"> 
+    <div id = "app"> 
         <div class="panel panel-primary">
               <div class="panel-heading">
                     <h3 class="panel-title">添加</h3>
@@ -26,7 +26,7 @@
 
                     <label>
                         Name:
-                        <input type="text" class="form-control" v-model = "name">
+                        <input type="text" class="form-control" v-model = "name" @keyup.enter = "add">
                     </label>
                     
                     <!-- 在vue中 使用时间绑定机制，为元素指定处理函数的时候，如果加了小括号，就可以指定传参了 -->
@@ -52,7 +52,7 @@
                 <tr v-for = "item in search(keywords)" :key = "item.id">
                     <td>{{item.id}}</td>
                     <td v-text = "item.name"></td>
-                    <td>{{item.ctime}}</td>
+                    <td>{{item.ctime | dateFormat}}</td>
                     <td>
                         <a href="" @click.prevent = "del(item.id)">删除</a>
                     </td>
@@ -60,7 +60,41 @@
             </tbody>
         </table>
     </div>
+
+    <div id = "app2">
+        {{dt | dateFormat}}
+    </div>
     <script>
+        //全局过滤器，进行时间的格式化
+        Vue.filter('dateFormat',function(dateStr,pattern = ""){
+            //根据给定的时间字符串，得到特定的时间
+            var dt = new Date(dateStr);
+
+            //yyyy-mm-dd
+            var y = dt.getFullYear();
+            var m = dt.getMonth() + 1;
+            var d = dt.getDate();
+
+            if(m == 10){
+                m = '0' + m;
+            }
+
+            if(d == 1){
+                d = '0' + d;
+            }
+
+            if(pattern && pattern .toLowerCase() === 'yyyy-mm-dd'){
+                return `${y}-${m}-${d}`;
+            }else{
+                var hh = dt.getHours();
+                var mm = dt.getMinutes();
+                var ss = dt.getSeconds();
+
+                return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+            }
+        
+        });
+
          var vm = new Vue({
             el : '#app',
             data : { 
@@ -127,6 +161,47 @@
                 }
             }    
         });
+
+        //过滤器的定义语法
+        //Vue.filter('过滤器的名称',functiom(){})
+
+        var vm2 = new Vue({
+            el : '#app2',
+            data : {
+                dt : new Date()
+            },
+            methods : {},
+            filters : {
+                //定义私有过滤器 过滤器有两个条件 过滤器名称和处理函数
+                //过滤器采用就近原则，如果全局过滤器和私有过滤器重名了，有线考虑私有过滤器
+                dateFormat : function(dateStr,pattern){
+                    //根据给定的时间字符串，得到特定的时间
+                    var dt = new Date(dateStr);
+
+                    //yyyy-mm-dd
+                    var y = dt.getFullYear();
+                    var m = (dt.getMonth() + 1).toString().padStart(2,'0');
+                    var d = (dt.getDate()).toString().padStart(2,'0');
+
+                    // if(m == 10){
+                    //     m = '0' + m;
+                    // }
+
+                    // if(d == 1){
+                    //     d = '0' + d;
+                    // }
+
+                    if(pattern && pattern .toLowerCase() === 'yyyy-mm-dd'){
+                         return `${y}-${m}-${d}`;
+                    }else{
+                         var hh = (dt.getHours()).toString().padStart(2,'0');
+                         var mm = (dt.getMinutes()).toString().padStart(2,'0');
+                         var ss = (dt.getSeconds()).toString().padStart(2,'0');
+                         return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+                    }
+                }
+            }
+        })
     </script>
 </body>
 
