@@ -34,7 +34,8 @@
 
                    <label>
                        搜索名称关键字:
-                       <input type="text" class="form-control" v-model = "keywords">
+                       <!-- 注意，Vue中所有的指令，在调用的时候，都已v-开头 -->
+                       <input type="text" class="form-control" v-model = "keywords" id = "search" v-focus v-color = "'blue'">
                    </label>
               </div>
         </div>
@@ -62,7 +63,7 @@
     </div>
 
     <div id = "app2">
-        {{dt | dateFormat}}
+        <p v-color = "'pink'" v-fontweight = "'900'" v-fontsize = "30">{{dt | dateFormat}}</p>
     </div>
     <script>
         //全局过滤器，进行时间的格式化
@@ -94,6 +95,48 @@
             }
         
         });
+
+
+        //自定义全局按键修饰符
+        Vue.config.keyCodes.f2 = 113
+
+        //使用Vue.directive()定义全局指令
+        //其中: 参数1 : 指令的名称,注意:在定义的时候，指令的前面，不需要加v-前缀
+        //在调用的时候，必须在指令前加上v-前缀来进行调用
+        //参数2是一个对象，这个对象身上有一些指令相关的函数，这些函数可以在特定的阶段，执行相关的操作
+
+        Vue.directive('focus',{
+            bind : function(el){
+                //每当指令绑定到元素上的时候，会离级执行这个
+                //bind函数，并且只执行一次
+                //注意:在每个函数中，第一个参数，永远是el，标识被绑定了的指令的那个
+                //因为，一个元素，只有插入dom之后，才能获取焦点
+                //el.focus()
+            },
+            inserted : function(el){
+                //inserted表示元素
+                //插入到dom中的时候，会执行inserted函数[触发一次]
+                el.focus()
+                //和js行为有关的操作，最好在insert中去操作，防止不生效
+            },
+            updated : function(){
+                //当VNode更新的时候，会执行updated，可能会触发多次
+            },
+             
+        })
+
+        //自动逸设置颜色的指令
+        Vue.directive('color',{
+            bind : function(el,binding){
+                //样式只要通过指令绑定给了元素，不管这个元素有没有被插入到页面中去，这个元素肯定有了一个内联样式
+                //将来元素肯定会显示到页面中去，这时候，浏览器的渲染引擎必然会解析样式，应用给这个样式
+                //和样式相关的操作，一般放到bind中
+                //console.log(binding.value)
+                el.style.color = binding.value
+            },
+            inserted : function(){},
+            updated : function(){}
+        })
 
          var vm = new Vue({
             el : '#app',
@@ -200,8 +243,22 @@
                          return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
                     }
                 }
+            },
+            directives : {
+                'fontweight' : {
+                    bind : function(el,binding){
+                        el.style.fontWeight = binding.value;
+                    }
+                },
+                'fontsize' : function(el,binding){
+                    //这个function等同于把代码携带了bind和update中去
+                    el.style.fontSize = parseInt(binding.value) + 'px';
+                }
             }
+
         })
+
+       // document.getElementById('search').focus()
     </script>
 </body>
 
