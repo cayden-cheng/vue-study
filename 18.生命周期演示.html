@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="修改msg" @click= "msg = 'No'">
+        <h3 id = "h3">{{msg}}</h3>
+    </div>
+    <script>
+         var vm = new Vue({
+            el : '#app',
+            data : { 
+               msg :'ok',
+               show(){
+                   console.log('执行了show方法')
+               }
+             },
+            methods : { },
+
+             //创建前的生命周期
+
+            beforeCreate(){
+                //这是我们遇到的第一个生命周期函数，标识实例完全被创建出来之前，会执行它
+                //console.log(this.msg)
+                //在beforeCreate生命周期函数执行的时候，data和methods中的数据都没有被初始化
+                //this.show()
+            },
+            created(){
+                //如果要调用methods中的方法，或者要操作data中的数据，最早只能在created中去操作
+                console.log(this.msg)
+                console.log(this.show())
+            },
+            beforeMount(){
+                //这是遇到的第三个生命周期函数，标识模板已经在内存中编辑完成了，但是尚未把模板
+                //渲染到页面中去
+                console.log(document.getElementById('h3').innerText);
+                //在beforeMount执行的时候，页面中的元素，还没有被真正的替换过来，只是之前写的一些模板字符
+            },
+            mounted(){
+                //这是遇到的第四个生命周期函数，标识，内存中的模板，已经真实的挂载到了页面中，
+                //用户已经可以看到渲染好的页面了
+                console.log(document.getElementById('h3').innerText);
+                //注意,mounted是实例创建期间最后一个生命周期函数，如果没有其他的操作，这个实例，就躺在我们的内存中一动不动
+                //如果需要通过某些插件来操作dom上的某些节点，最早可在mounted中操作
+                //只要执行完了mounted，就标识这个Vue实例已经初始化完成了，此时，组件已经脱离了创建阶段，进入了运行阶段
+            },
+
+
+            //运行中的两个时间
+            beforeUpdate(){
+                //这时候，标识我们的页面还没有被更新，但是数据已经被更新了
+                
+                console.log('界面上元素的内容:' + document.getElementById('h3').innerText);
+                console.log('data中数组的内容' + this.msg)
+                //得出结论:当执行beforeUpdate的时候，页面中显示的数据，
+                //还是旧的，data是最新的，页面尚未和最新的数据保持同步
+            },
+            updated(){
+                console.log('界面上元素的内容:' + document.getElementById('h3').innerText);
+                console.log('data中数组的内容' + this.msg)
+                //updated时间执行的时候，页面和data数据已经同步了，都是最最新的
+            }
+        });
+    </script>
+</body>
+
+</html>
