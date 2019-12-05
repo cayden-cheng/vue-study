@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/vue-resource-1.3.4.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap-3.3.7.css">
+</head>
+
+<body>
+    <div id="app">
+
+        
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">添加品牌</h3>
+              </div>
+              <div class="panel-body form-inline">
+                    <label>
+                        carName:
+                        <input type="text" v-model = "carName" class = "form-control">
+                    </label>
+                    <input type="button" value="添加" @click = "add" class = "btn btn_primary">
+              </div>
+        </div>
+        
+        
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <!-- <th>ID</th> -->
+                    <th>Name</th>
+                    <th>carGroup</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr  v-for = "item in list" :key = "item.id">
+                    <!-- <td>{{item.id}}</td> -->
+                    <td>{{item.carName}}</td>
+                    <td>{{item.carGroup}}</td>
+                    <td>
+                        <a href="">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <script>
+         var vm = new Vue({
+            el : '#app',
+            data : { 
+                   list: []
+             },
+            methods : {
+                add(){
+                    //添加品牌列表
+                    this.$http.post('http://127.0.0.1:8083/admin/carMethod/addCarColor', {color: this.carName,label: '#fffff'}, { emulateJSON: true }).then(result => {
+                        console.log(result)
+                        if(result.body.msg === 'success'){
+                            //成功，刷新页面
+                            alert('添加成功')
+                            this.getAllList();
+                        }else{
+                            alert('添加失败')
+                        }
+                    })
+                },
+                getAllList(){
+                    //获取所有车的列表
+                    this.$http.post('http://127.0.0.1:8083/admin/car/gerAllCarBrand', {}, { emulateJSON: true }).then(result => {
+                        if(result.body.msg === 'success'){
+                            //成功
+                            this.list = result.body.data
+                        }else{
+                            alert('获取数据失败')
+                        }
+                    })
+                }
+            },
+            created(){
+                this.getAllList()
+            }  
+        });
+    </script>
+</body>
+
+</html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang='en'>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,43 +9,60 @@
     <title>Document</title>
     <script src="./lib/vue-2.4.0.js"></script>
     <script src="./lib/vue-resource-1.3.4.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- 注意，因为vue-resource依赖vue，所以需要先依赖vue -->
     <!-- this.$http.json -->
 </head>
 
 <body>
     <div id="app">
-        <input type="button" value="get请求" @click = "getInfo">
-        <input type="button" value="post请求" @click = "postInfo">
-        <input type="button" value="JSONP请求" @click = "jsonpInfo">
+        <input type="button" value="get请求" @click="getInfo">
+        <input type="button" value="post请求" @click="postInfo">
+        <input type="button" value="JSONP请求" @click="axiosTest">
     </div>
     <script>
-         Vue.http.headers.common['Accept'] = 'application/json';
-         var vm = new Vue({
-            el : '#app',
-            data : {  },
-            methods : { 
-                getInfo(){
+        Vue.http.headers.common['Accept'] = 'application/json';
+        const axios = require('axios');
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {
+                getInfo() {
                     //发送get请求之后
-                    this.$http.get('http://127.0.0.1:8083/admin/carMethod/getAllCarColor').then(function(result){
+                    this.$http.get('http://127.0.0.1:8083/admin/carMethod/getAllCarColor').then(function (result) {
                         console.log(result);
                         //通过result.body拿到服务器返回的成功的数据
                     })
                 },
-                postInfo(){
+                postInfo() {
                     //手动发起的post请求默认没有表单格式，所以有的服务器处理不了
                     //通过post方法的第三个参数 设置提交的内容类型 为 普通表单的提交格式
-                   this.$http.post('http://127.0.0.1:8083/admin/car/gerAllCarBrand',{},{emulateJSON: true}).then(result => {
-                        console.log(result);     
-                   })
+                    this.$http.post('http://127.0.0.1:8083/admin/car/gerAllCarBrand', {}, { emulateJSON: true }).then(result => {
+                        console.log(result);
+                    })
                 },
-                jsonpInfo(){
+                jsonpInfo() {
                     //jsonp请求
                     this.$http.jsonp('http://127.0.0.1:8083/admin/carMethod/getAllCarColor').then(result => {
                         console.log(result);
                     })
+                },
+                axiosTest() {
+                    // Make a request for a user with a given ID
+                    axios.get('http://127.0.0.1:8083/admin/carMethod/getAllCarColor')
+                        .then(function (response) {
+                            // handle success
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });
                 }
-            }    
+            }
         });
     </script>
 </body>
