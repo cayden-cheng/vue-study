@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang='en'>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,78 +15,99 @@
 <body>
     <div id="app">
 
-        
+
         <div class="panel panel-primary">
-              <div class="panel-heading">
-                    <h3 class="panel-title">添加品牌</h3>
-              </div>
-              <div class="panel-body form-inline">
-                    <label>
-                        carName:
-                        <input type="text" v-model = "carName" class = "form-control">
-                    </label>
-                    <input type="button" value="添加" @click = "add" class = "btn btn_primary">
-              </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">添加颜色</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label>
+                    color:
+                    <input type="text" v-model="color" class="form-control">
+                </label>
+                <input type="button" value="添加" @click="add" class="btn btn_primary">
+            </div>
         </div>
-        
-        
+
+
         <table class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
-                    <!-- <th>ID</th> -->
+                    <th>ID</th>
                     <th>Name</th>
                     <th>carGroup</th>
                     <th>Operation</th>
                 </tr>
             </thead>
             <tbody>
-                <tr  v-for = "item in list" :key = "item.id">
-                    <!-- <td>{{item.id}}</td> -->
-                    <td>{{item.carName}}</td>
-                    <td>{{item.carGroup}}</td>
+                <tr v-for="item in list" :key="item.id">
+                     <td>{{item.id}}</td>
+                    <td>{{item.color}}</td>
+                    <td>{{item.label}}</td>
                     <td>
-                        <a href="">删除</a>
+                        <a href="" @click.prevent = "del(item.id)">删除</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
     <script>
-         var vm = new Vue({
-            el : '#app',
-            data : { 
-                   list: []
-             },
-            methods : {
-                add(){
+        //设置服务器根地址
+        //如果我们通过全局配置了请求数据接口的根域名，则在每次单独发起http请求的时候
+        //请求的url路径，应当以相对路径开头，前面不能带/，否则，不会启动根目录做拼接
+        Vue.http.options.root = 'http://127.0.0.1:8083/';
+        //全局启用emlateJSON
+        Vue.http.options.emulateJSON = true;
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                color : '',
+                list: []
+            },
+            methods: {
+                add() {
                     //添加品牌列表
-                    this.$http.post('http://127.0.0.1:8083/admin/carMethod/addCarColor', {color: this.carName,label: '#fffff'}, { emulateJSON: true }).then(result => {
+                    this.$http.post('admin/carMethod/addCarColor', { color: this.color, label: '#fffff' }).then(result => {
                         console.log(result)
-                        if(result.body.msg === 'success'){
+                        if (result.body.msg === 'success') {
                             //成功，刷新页面
                             alert('添加成功')
                             this.getAllList();
-                        }else{
+                        } else {
                             alert('添加失败')
                         }
                     })
                 },
-                getAllList(){
+                getAllList() {
                     //获取所有车的列表
-                    this.$http.post('http://127.0.0.1:8083/admin/car/gerAllCarBrand', {}, { emulateJSON: true }).then(result => {
-                        if(result.body.msg === 'success'){
+                    this.$http.get('admin/carMethod/getAllCarColor').then(result => {
+                        if (result.body.msg === 'success') {
                             //成功
                             this.list = result.body.data
-                        }else{
+                        } else {
                             alert('获取数据失败')
                         }
                     })
-                }
-            },
-            created(){
+                },
+                del(id) {
+                //品牌id
+                var url = 'admin/carMethod/delCarColor?carColorId=' + id;
+                this.$http.post(url, {}).then(result => {
+                    if (result.body.msg === 'success') {
+                        //成功
+                      console.log('删除成功')
+                      this.getAllList()
+                    } else {
+                        alert('删除失败')
+                    }
+                });
                 this.getAllList()
-            }  
+            }
+            },
+            created() {
+                this.getAllList()
+            },
         });
     </script>
 </body>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <link rel="stylesheet" href="./lib/animate.css">
+    <!-- 入场 bounceIn 离场 bounceOut -->
+</head>
+
+<body>
+    <!-- <div id="app">
+        <input type="button" value="切换" @click="flag=!flag">
+        点击按钮，让h3显示，再点击让h3隐藏 
+         使用 :duration 来统一入场离场动画时长 
+        <transition 
+        enter-active-class="bounceIn" 
+        enter-leave-class="bounceOut" 
+        :duration = "100">
+            <h3 v-if="flag" class="animated">这是一个h3</h3>
+        </transition>
+
+    </div> -->
+
+    <div id="app">
+            <input type="button" value="切换" @click="flag=!flag">
+            <!-- 点击按钮，让h3显示，再点击让h3隐藏 -->
+            <!-- 使用 :duration 来统一入场离场动画时长 -->
+            <transition 
+            enter-active-class="bounceIn" 
+            enter-leave-class="bounceOut" 
+            :duration = "{enter: 200, leave: 400}">
+                <h3 v-if="flag" class="animated">这是一个h3</h3>
+            </transition>
+    
+        </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag: false
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>
