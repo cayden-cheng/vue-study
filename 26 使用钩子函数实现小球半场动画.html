@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+<style>
+.ball{
+    width:15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+</style>
+
+<body>
+    <div id="app">
+        <input type="button" value="快到碗里来" @click="flag=!flag">
+        <transition
+        @before-enter="beforeEnter"
+        @enter = "enter" 
+        @after-enter = "afterEnter">
+                <div class="ball" v-show = "flag"></div>
+                <!-- 使用transition元素把小球包裹起来 -->
+            </div>
+        </transition>
+    <script>
+         var vm = new Vue({
+            el : '#app',
+            data : { 
+                flag: false
+             },
+            methods : { 
+                //注意:动画钩子函数的第一个参数el,表示要执行动画的那个元素,是个原生的dom对象
+                //可以认为el是通过document.getElementById('')获取原生dom对象的
+                beforeEnter(el){
+                    //表示动画入场之前，此时动画尚未开始，可以在beforeEnter中设置元素开始
+                    //动画的起始样式
+                    //设置开始动画之前的起始位置
+                    el.style.transform = "translate(0,0)"
+                },
+                enter(el,done){
+                    el.offsetWidth
+                    //enter表示动画开始之后的样式，这里可以设置小球完成动画之后的结束状态
+                    el.style.transform = "translate(150px,450px)"
+                    el.style.transition = "all 1s ease"
+                    //这里的done，其实就是afterEnter这个函数的引用
+                    done()
+                },
+                afterEnter(el){
+                    //动画完成指挥
+                    this.flag = false
+                }
+            }    
+        });
+    </script>
+</body>
+
+</html>
