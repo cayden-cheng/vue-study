@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <mycom2></mycom2>
+    </div>
+    <script>
+        Vue.component('mycom2',{
+            //注意:由template创建的模板，有且只能有一个根元素
+            template: '<h3>这是直接使用Vue.component创建出来的组件</h3>'
+        })
+         var vm = new Vue({
+            el : '#app',
+            data : {  },
+            methods : { }    
+        });
+    </script>
+</body>
+
+</html>

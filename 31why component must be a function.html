@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <counter></counter>
+        <hr/>
+        <counter></counter>
+        <hr/>
+        <counter></counter>
+    </div>
+    <template id = 'tmp1'>
+        <div>
+            <input type="button" value="+1" @click="increment">
+            <h3>count:{{count}}</h3>
+        </div>
+    </template>
+    <script>
+        var dataObj = {count : 0}
+        //这是一个计数器的按钮，身上有个按钮，每当点击按钮，让data中的count值+1
+        Vue.component('counter',{
+            template: '#tmp1',
+            data: function(){
+                return {
+                    count: 0
+                }
+            },
+            methods:{
+                increment(){
+                    this.count++;
+                }
+            }
+        })
+         var vm = new Vue({
+            el : '#app',
+            data : {  },
+            methods : { }    
+        });
+    </script>
+</body>
+
+</html>

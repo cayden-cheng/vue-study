@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <my-compon1></my-compon1>
+    </div>
+    <script>
+
+        // //1.1 使用Vue.extend 来创建全局的Vue组件
+        // var com1 = Vue.extend({
+        //     template: '<h3>这是使用Vue.extend创建的组件' //通过template属性，指定了解组件要展示的HTML结构
+        // })
+
+        // // 1.2 使用Vue.component({'组件的名称',创建出来的模板对象})
+        // Vue.component('myCompon1',com1)
+
+        //简写1.1 1.2
+        Vue.component('myCompon1',Vue.extend({
+            template: '<h3>这是使用Vue.extend创建的组件' //通过template属性，指定了解组件要展示的HTML结构
+        }))
+         var vm = new Vue({
+            el : '#app',
+            data : {  },
+            methods : { }    
+        });
+    </script>
+</body>
+
+</html>
